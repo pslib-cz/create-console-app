@@ -1,11 +1,15 @@
 {
   "name": "@pslib/create-ts-console",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Scaffolder pro TS konzolovou app podle @pslib/console-app",
   "bin": {
     "create-ts-console": "bin/index.js"
   },
-  "files": ["bin", "README.md", "LICENSE"],
+  "files": [
+    "bin",
+    "README.md",
+    "LICENSE"
+  ],
   "license": "MIT",
   "dependencies": {
     "fs-extra": "^11.2.0",
