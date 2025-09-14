@@ -5,6 +5,7 @@ Scaffolder pro založení TypeScript konzolové aplikace. Vytvoří projekt podl
 ## Požadavky
 
 Node.js ≥ 18 (obsahuje i npm)
+
 Ověření: 
 ````
 node -v
@@ -24,13 +25,15 @@ npm run dev
 
 ## Automatická instalace závislostí (volitelné)
 ````
-npm create @pslib/ts-console@latest moje-app -- --install
+npm create @pslib/ts-console@latest -- moje-app --install
 ````
 
 ## Alternativní spuštění
 ````
 npx create-ts-console moje-app
+npx create-ts-console moje-app --install
 ````
 ````
-npx -p @pslib/create-ts-console create-pslib-console-app moje-app
+npx -p @pslib/create-ts-console create-ts-console moje-app
+npx -p @pslib/create-ts-console create-ts-console moje-app --install
 ````

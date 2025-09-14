@@ -5,9 +5,18 @@ const pacote = require('pacote');
 const { execSync } = require('child_process');
 
 (async function () {
-  const [, , rawName, ...rest] = process.argv;
-  const appName = rawName || 'ts-console-app';
-  const autoInstall = rest.includes('--install') || rest.includes('-i');
+  const args = process.argv.slice(2);
+  const nameArg = args.find(a => !a.startsWith('-'));
+  const flags = new Set(args.filter(a => a.startsWith('-')));
+  const appName = nameArg || 'ts-console-app';
+
+  const autoInstall =
+    flags.has('--install') ||
+    flags.has('-i') ||
+    process.env.npm_config_install === 'true' ||
+    process.env.npm_config_install === '1' ||
+    process.env.npm_config_pslib_install === 'true' ||
+    process.env.npm_config_pslib_install === '1';
 
   const target = path.resolve(process.cwd(), appName);
   if (fs.existsSync(target) && (await fs.readdir(target)).length) {
@@ -17,15 +26,16 @@ const { execSync } = require('child_process');
 
   console.log(`📦 Vytvářím projekt z @pslib/console-app do ./${appName} …`);
   await fs.mkdirp(target);
-
-  // Stáhne a rozbalí obsah publikovaného balíčku do cíle
   await pacote.extract('@pslib/console-app@latest', target);
 
-  // Přepiš name v package.json
   const pkgPath = path.join(target, 'package.json');
   const pkg = JSON.parse(await fs.readFile(pkgPath, 'utf8'));
   pkg.name = appName;
+  pkg.private = true; 
   await fs.writeFile(pkgPath, JSON.stringify(pkg, null, 2));
+
+  const gi = ['node_modules/', 'dist/', '.env', '.DS_Store'].join('\n') + '\n';
+  await fs.writeFile(path.join(target, '.gitignore'), gi, 'utf8');
 
   console.log('✅ Struktura hotová.');
   if (autoInstall) {
@@ -42,6 +52,6 @@ Další kroky:
   cd ${appName}
   ${autoInstall ? '' : 'npm install'}
   npm run dev
-  # VS Code: F5 → "Run (ts-node)" nebo "Run (compiled JS)"
+  # VS Code: F5 → "Attach (ts-node-dev)" / "Run (compiled JS)"
 `);
 })();

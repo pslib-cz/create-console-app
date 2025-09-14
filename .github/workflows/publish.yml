@@ -1,0 +1,50 @@
+name: Auto-publish on npm registry if version is new
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          registry-url: 'https://registry.npmjs.org'
+          cache: 'npm'
+
+      - run: npm ci
+      - run: npm run typecheck --if-present
+      - run: npm test --if-present
+
+      - name: Determine version
+        id: v
+        run: echo "ver=$(node -p "require('./package.json').version")" >> $GITHUB_OUTPUT
+
+      - name: Skip if version already on npm
+        id: exists
+        continue-on-error: true
+        run: npm view @pslib/create-console-app@${{ steps.v.outputs.ver }} version
+
+      - name: Dry-run pack
+        if: steps.exists.outcome == 'failure'
+        run: npm pack --dry-run
+
+      - name: Publish
+        if: steps.exists.outcome == 'failure'
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NPM_CONFIG_PROVENANCE: 'true'
+        run: npm publish --access public
+
+      - name: Info
+        if: steps.exists.outcome == 'success'
+        run: echo "Version ${{ steps.v.outputs.ver }} already published. Skipping."

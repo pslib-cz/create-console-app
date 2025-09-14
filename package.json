@@ -1,6 +1,6 @@
 {
   "name": "@pslib/create-ts-console",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "Scaffolder pro TS konzolovou app podle @pslib/console-app",
   "bin": {
     "create-ts-console": "bin/index.js"
@@ -14,5 +14,8 @@
   "dependencies": {
     "fs-extra": "^11.2.0",
     "pacote": "^17.0.0"
+  },
+  "publishConfig": { 
+    "access": "public" 
   }
 }
