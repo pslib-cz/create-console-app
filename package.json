@@ -18,12 +18,12 @@
   "publishConfig": { 
     "access": "public" 
   },
-    "repository": {
+  "repository": {
     "type": "git",
     "url": "git+https://github.com/pslib-cz/create-console-app.git"
   },
   "bugs": {
     "url": "https://github.com/pslib-cz/create-console-app/issues"
   },
-  "homepage": "https://github.com/pslib-cz/create-console-app#readme",
+  "homepage": "https://github.com/pslib-cz/create-console-app#readme"
 }
