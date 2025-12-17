@@ -4,7 +4,7 @@ Scaffolder pro založení TypeScript konzolové aplikace. Vytvoří projekt podl
 
 ## Požadavky
 
-Node.js ≥ 18 (obsahuje i npm)
+Node.js ≥ 20 (obsahuje i npm)
 
 Ověření: 
 ````
